@@ -10,4 +10,10 @@ export class TestService {
     public getTestById = async (id: number) => {
         return await prisma.test.findFirst({ where: { id } });
     };
+
+    public getTestForPost = async (postId: number) => {
+        return await prisma.test.findMany({ where: {
+            postId
+        }})
+    }
 }
