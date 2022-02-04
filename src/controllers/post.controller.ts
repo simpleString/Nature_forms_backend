@@ -7,13 +7,17 @@ const router = Router();
 const postService = new PostService();
 const testService = new TestService();
 
+router.get('/file', async (req: Request, res: Response) => {
+  res.sendFile('/home/dmitry/Projects/kristina_diplom/backend/posts/second.md');
+});
+
 router.get('/:id', async (req: Request, res: Response) => {
   let id = Number.parseInt(req.params.id);
   if (!isNaN(id)) {
     const post = await postService.getPostById(id);
     console.log(post);
 
-    if (post) return res.json({ post });
+    if (post) return res.json({ ...post });
     return notFound(res);
   }
   invalidParams(res);

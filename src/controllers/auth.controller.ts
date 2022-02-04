@@ -14,7 +14,10 @@ router.post('/login', async (req: Request, res: Response) => {
     try {
       const token = await authService.login({ username, password });
       res.statusCode = 202;
-      res.cookie('token', token, { httpOnly: true, maxAge: 900000 });
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 12,
+      });
       console.log(token);
       return res.end();
     } catch (error) {}
