@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { invalidParams, notFound } from '../errors/responseErrors';
+import { ITestAnswerDTO, ITestFormDTO } from '../interfaces';
 
 import { PostService, TestService } from '../services';
 
@@ -29,14 +30,47 @@ router.get('', async (req: Request, res: Response) => {
   res.json(posts);
 });
 
+router.get('/:id/tests/result', async (req: Request, res: Response) => {
+  let id = Number.parseInt(req.params.id);
+  if (!isNaN(id)) {
+    const result = await testService.getUserResult(req.userId, id);
+    console.log(result);
+
+    if (result) return res.json(result);
+    notFound(res);
+  }
+  invalidParams(res);
+});
+
 router.get('/:id/tests', async (req: Request, res: Response) => {
   let id = Number.parseInt(req.params.id);
   if (!isNaN(id)) {
     const tests = await testService.getTestForPost(id);
+    console.log(tests);
+
     if (tests) return res.json(tests);
     notFound(res);
   }
   invalidParams(res);
+});
+
+router.post('/:id/tests', async (req: Request, res: Response) => {
+  console.log(req.body);
+
+  const answers = req.body as ITestAnswerDTO[];
+  const result = await testService.recordUserResult(req.userId, answers);
+  res.json(result);
+});
+
+router.post('', async (req: Request, res: Response) => {
+  const title = req.body.title;
+  const content = req.body.content;
+  const tests = req.body.tests as ITestFormDTO[];
+  console.log(tests);
+  const post = await postService.createPost({ title, content });
+  const result = await testService.createTestsForPost(post, tests);
+  console.log(result);
+  res.json(result);
 });
 
 export default router;

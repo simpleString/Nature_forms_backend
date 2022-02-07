@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -14,21 +15,23 @@ model User {
   id Int @id @default(autoincrement())
   username String
   password String
-  token UserToken?
+  userResult UserResult[]
 }
 
 model Question {
   id Int @id @default(autoincrement())
-  test Test @relation(fields: [testId], references: [id])
+  name String
+  test Test @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId Int
+  isRightQuestion Boolean @default(false)
   
 }
 
 model Test {
   id Int @id @default(autoincrement())
   title String
-  questions Question[]
-  post Post @relation(fields: [postId], references: [id])
+  questions Question[] 
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int 
 }
 
@@ -36,12 +39,15 @@ model Post {
   id Int @id @default(autoincrement())
   title String
   content String
-  test Test?
+  test Test[]
+  userResult UserResult[]
 }
 
-model UserToken {
+model UserResult {
   id Int @id @default(autoincrement())
-  token String
-  user User @relation(fields: [userId], references: [id])
+  result Int
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }

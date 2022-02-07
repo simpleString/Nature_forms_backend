@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
-import { testRouter, postRouter, authRouter } from './controllers';
+import { postRouter, authRouter } from './controllers';
 import { PrismaClient } from '@prisma/client';
 import authenticateToken from './middlewares/auth.middleware';
 import cookieParser from 'cookie-parser';
@@ -16,7 +16,6 @@ app.use(cookieParser());
 
 const port = 5000;
 
-app.use('/tests', authenticateToken, testRouter.default);
 app.use('/posts', authenticateToken, postRouter.default);
 app.use('/auth', authRouter.default);
 
