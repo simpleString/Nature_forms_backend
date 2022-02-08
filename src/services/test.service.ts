@@ -49,13 +49,20 @@ export class TestService {
     answers: ITestAnswerDTO[]
   ) => {
     let result = 0;
-    Promise.all(
+    console.log('Check here: ' + answers);
+    answers.map((answer) =>
+      console.log('answerId: ' + answer.answerId + ' testId' + answer.testId)
+    );
+
+    await Promise.all(
       answers.map(async (answer) => {
         const object = await prisma.question.findFirst({
           where: { id: answer.answerId },
           select: { isRightQuestion: true },
         });
-        if (object?.isRightQuestion) result++;
+        console.log(object);
+        if (object?.isRightQuestion) result += 1;
+        console.log(result);
       })
     );
     const test = await prisma.test.findFirst({
@@ -68,10 +75,17 @@ export class TestService {
   };
 
   public getUserResult = async (userId: number, postId: number) => {
-    const userResult = await prisma.userResult.findFirst({
+    const userResult = await prisma.userResult.aggregate({
+      _max: {
+        result: true,
+      },
       where: { userId, postId },
     });
+    // const userResult = await prisma.userResult.findFirst({
+    //   where: {}
+    //   // where: { userId, postId },
+    // });
     const testCount = await prisma.test.count({ where: { postId } });
-    return { amount: testCount, result: userResult?.result };
+    return { amount: testCount, result: userResult._max.result || 0 };
   };
 }

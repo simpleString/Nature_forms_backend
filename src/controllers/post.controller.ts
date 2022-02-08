@@ -8,8 +8,10 @@ const router = Router();
 const postService = new PostService();
 const testService = new TestService();
 
-router.get('/file', async (req: Request, res: Response) => {
-  res.sendFile('/home/dmitry/Projects/kristina_diplom/backend/posts/second.md');
+router.get('/result', async (req: Request, res: Response) => {
+  const posts = await postService.getAllPostsWithUserResult(req.userId);
+  console.log(posts);
+  res.json(posts);
 });
 
 router.get('/:id', async (req: Request, res: Response) => {
@@ -22,12 +24,6 @@ router.get('/:id', async (req: Request, res: Response) => {
     return notFound(res);
   }
   invalidParams(res);
-});
-
-router.get('', async (req: Request, res: Response) => {
-  const posts = await postService.getAllPosts();
-  console.log(posts);
-  res.json(posts);
 });
 
 router.get('/:id/tests/result', async (req: Request, res: Response) => {

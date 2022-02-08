@@ -15,7 +15,7 @@ model User {
   id Int @id @default(autoincrement())
   username String
   password String
-  userResult UserResult[]
+  userResults UserResult[]
 }
 
 model Question {
@@ -39,8 +39,8 @@ model Post {
   id Int @id @default(autoincrement())
   title String
   content String
-  test Test[]
-  userResult UserResult[]
+  tests Test[]
+  userResults UserResult[]
 }
 
 model UserResult {
