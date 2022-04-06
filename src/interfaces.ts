@@ -3,9 +3,18 @@ export interface IUserData {
   password: string;
 }
 
+export interface IUserSignDTO {
+  username: string;
+  surname: string;
+  password: string;
+  email: string;
+  status: string;
+}
+
 export interface IPostDTO {
   title: string;
   content: string;
+  categoryId: number;
 }
 
 export interface ITestFormDTO {

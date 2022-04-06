@@ -3,14 +3,22 @@ import express from 'express';
 import cors from 'cors';
 
 import { postRouter, authRouter } from './controllers';
-import { PrismaClient } from '@prisma/client';
 import authenticateToken from './middlewares/auth.middleware';
 import cookieParser from 'cookie-parser';
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(express.urlencoded());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'http://192.168.0.251:3000',
+      'http://172.29.80.1:3000',
+    ],
+    credentials: true,
+  })
+);
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 

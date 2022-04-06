@@ -1,5 +1,4 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import fs from 'fs/promises';
 import { IPostDTO } from '../interfaces';
 const prisma = new PrismaClient();
 
@@ -14,7 +13,11 @@ export class PostService {
 
   public createPost = async (post: IPostDTO) => {
     return await prisma.post.create({
-      data: { title: post.title, content: post.content },
+      data: {
+        title: post.title,
+        content: post.content,
+        categoryId: post.categoryId,
+      },
     });
   };
 
@@ -26,7 +29,6 @@ export class PostService {
         userResults: { where: { userId } },
       },
     });
-    console.log(results);
 
     return results.map((result) => {
       return {

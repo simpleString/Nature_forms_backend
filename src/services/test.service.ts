@@ -49,10 +49,6 @@ export class TestService {
     answers: ITestAnswerDTO[]
   ) => {
     let result = 0;
-    console.log('Check here: ' + answers);
-    answers.map((answer) =>
-      console.log('answerId: ' + answer.answerId + ' testId' + answer.testId)
-    );
 
     await Promise.all(
       answers.map(async (answer) => {
@@ -60,9 +56,7 @@ export class TestService {
           where: { id: answer.answerId },
           select: { isRightQuestion: true },
         });
-        console.log(object);
         if (object?.isRightQuestion) result += 1;
-        console.log(result);
       })
     );
     const test = await prisma.test.findFirst({
