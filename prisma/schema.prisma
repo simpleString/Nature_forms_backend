@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -10,38 +11,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model UserStatus {
+  id Int @id @default(autoincrement())
+  name String
+  users User[]
+}
+
 model User {
   id Int @id @default(autoincrement())
-  username String
+  username String 
   password String
-  token UserToken?
+  name String
+  surname String
+  email String
+  status UserStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  statusId Int
+  userResults UserResult[]
 }
 
 model Question {
   id Int @id @default(autoincrement())
-  test Test @relation(fields: [testId], references: [id])
+  name String
+  test Test @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId Int
-  
+  isRightQuestion Boolean @default(false)
 }
 
 model Test {
   id Int @id @default(autoincrement())
   title String
-  questions Question[]
-  post Post @relation(fields: [postId], references: [id])
+  questions Question[] 
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int 
+}
+
+model PostCategory {
+  id Int @id @default(autoincrement())
+  name String
+  posts Post[]
 }
 
 model Post {
   id Int @id @default(autoincrement())
   title String
   content String
-  test Test?
+  tests Test[]
+  userResults UserResult[]
+  category PostCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
 }
 
-model UserToken {
+model UserResult {
   id Int @id @default(autoincrement())
-  token String
-  user User @relation(fields: [userId], references: [id])
+  result Int
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 }

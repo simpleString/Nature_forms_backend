@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { invalidParams } from '../errors/responseErrors';
+import { IUserSignDTO } from '../interfaces';
 import authenticateToken from '../middlewares/auth.middleware';
 import { AuthService } from '../services';
 
@@ -18,11 +19,21 @@ router.post('/login', async (req: Request, res: Response) => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 12,
       });
-      console.log(token);
       return res.end();
     } catch (error) {}
   }
   return invalidParams(res, "Password or username did't match");
+});
+
+router.post('/signup', async (req: Request, res: Response) => {
+  const userData = req.body as IUserSignDTO;
+  try {
+    const result = await authService.signUp(userData);
+    return res.json(result);
+  } catch (error) {
+    res.statusCode = 500;
+    return res.json(error);
+  }
 });
 
 router.get('/logout', (req: Request, res: Response) => {
