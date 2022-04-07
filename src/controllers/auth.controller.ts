@@ -22,7 +22,7 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.end();
     } catch (error) {}
   }
-  return invalidParams(res, "Password or username did't match");
+  return invalidParams(res, "Password or username didn't match");
 });
 
 router.post('/signup', async (req: Request, res: Response) => {

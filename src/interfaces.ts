@@ -15,6 +15,7 @@ export interface IPostDTO {
   title: string;
   content: string;
   categoryId: number;
+  img: string
 }
 
 export interface ITestFormDTO {

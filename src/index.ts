@@ -8,13 +8,17 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
+app.use('/uploads',express.static('uploads'))
+
+
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'http://192.168.0.251:3000',
-      'http://172.29.80.1:3000',
-    ],
+    origin: true,
+    // origin: [
+    //   'http://localhost:3000',
+    //   'http://192.168.0.251:3000',
+    //   'http://172.29.80.1:3000',
+    // ],
     credentials: true,
   })
 );
@@ -22,7 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-const port = 5000;
 
 app.use('/posts', authenticateToken, postRouter.default);
 app.use('/auth', authRouter.default);

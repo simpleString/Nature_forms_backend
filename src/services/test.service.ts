@@ -75,11 +75,20 @@ export class TestService {
       },
       where: { userId, postId },
     });
-    // const userResult = await prisma.userResult.findFirst({
-    //   where: {}
-    //   // where: { userId, postId },
-    // });
+
     const testCount = await prisma.test.count({ where: { postId } });
     return { amount: testCount, result: userResult._max.result || 0 };
   };
+
+
+  //   const userResult = await prisma.userResult.aggregate({
+  //     _max: {
+  //       result: true,
+  //     },
+  //     where: { userId, postId },
+  //   });
+  //
+  //   const testCount = await prisma.test.count({ where: { postId } });
+  //   return { amount: testCount, result: userResult._max.result || 0 };
+  // };
 }
