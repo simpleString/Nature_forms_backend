@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export class AuthService {
   public login = async (userData: IUserData) => {
     const user = await prisma.user.findFirst({
-      where: { username: userData.username },
+      where: { email: userData.email },
     });
 
     if (user) {
@@ -24,9 +24,10 @@ export class AuthService {
     const username = await prisma.user.findFirst({
       where: { email: userData.email },
     });
+    console.log(username);
     if (username) throw new Error('User already exist');
     const user = await prisma.user.create({
-      data: { name: userData.username, ...userData },
+      data: {username: userData.username, password: userData.password, surname: userData.surname, statusId: Number.parseInt(userData.status), email: userData.email, }
     });
     return user;
   };
@@ -38,4 +39,25 @@ export class AuthService {
     });
     return username;
   };
+
+  public async userStatuses() {
+    return await prisma.userStatus.findMany();
+  }
+
+  public async getUserData(userId: any) {
+    return await prisma.user.findUnique({where: {id: userId}})
+  }
+
+  public async updateUserData(userData: IUserSignDTO, userId: number) {
+    return await  prisma.user.update({
+      data: {
+        username: userData.username,
+        password: userData.password,
+        surname: userData.surname,
+        email: userData.email,
+        statusId: Number.parseInt(userData.status)
+      },
+      where: {id: userId}
+    });
+  }
 }

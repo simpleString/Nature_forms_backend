@@ -19,9 +19,8 @@ model UserStatus {
 
 model User {
   id Int @id @default(autoincrement())
-  username String 
   password String
-  name String
+  username String
   surname String
   email String
   status UserStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)

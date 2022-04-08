@@ -1,4 +1,4 @@
-import { Post, Prisma, PrismaClient } from '@prisma/client';
+import { Post, PrismaClient } from '@prisma/client';
 import { ITestAnswerDTO, ITestFormDTO } from '../interfaces';
 
 const prisma = new PrismaClient();
@@ -14,7 +14,7 @@ export class TestService {
 
   public getTestForPost = async (postId: number) => {
     return await prisma.test.findMany({
-      include: { questions: true },
+      include: { questions: true, post: { select: {title: true} } },
       where: {
         postId,
       },
@@ -77,7 +77,9 @@ export class TestService {
     });
 
     const testCount = await prisma.test.count({ where: { postId } });
-    return { amount: testCount, result: userResult._max.result || 0 };
+    const category = await prisma.post.findFirst({where: {id: postId}, select: {category: {select: {name: true, id: true
+    }}}})
+    return { amount: testCount, result: userResult._max.result || 0, category: category?.category, };
   };
 
 
