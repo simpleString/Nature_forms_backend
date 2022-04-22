@@ -70,6 +70,7 @@ router.get('/:id/tests', async (req: Request, res: Response) => {
   let id = Number.parseInt(req.params.id);
   if (!isNaN(id)) {
     const tests = await testService.getTestForPost(id);
+    
 
     if (tests) return res.json(tests);
     notFound(res);

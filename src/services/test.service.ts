@@ -14,7 +14,7 @@ export class TestService {
 
   public getTestForPost = async (postId: number) => {
     return await prisma.test.findMany({
-      include: { questions: true, post: { select: {title: true} } },
+      include: { questions: true, post: { select: {category: {select: {name: true}}} } },
       where: {
         postId,
       },
